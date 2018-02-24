@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +39,11 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     private static final String USGS_REQUEST_URL =
             "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=5&limit=10";
 
-    /*Adapter for the list of earthquakes*/
+    /* Adapter for the list of earthquakes */
     private EarthquakeAdapter mAdapter;
+
+    /* TextView that is displayed if the list is empty */
+    private TextView mEmptyStateTextView;
 
     /**
      * Constant value for the earthquake Loader ID. We can chose any integer.
@@ -55,6 +59,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
         // Get a reference to the ListView, and attach the adapter to the listView.
         ListView listView = (ListView) findViewById(R.id.list);
+
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+        listView.setEmptyView(mEmptyStateTextView);
 
         /*
             final ArrayList<Earthquake> earthquakes = QueryUtils.extractFeatureFromJson();
@@ -199,6 +206,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     public void onLoadFinished(Loader<List<Earthquake>> loader, List<Earthquake> earthquakes)
         {
             Log.i(LOG_TAG, "TEST: onLoadFinished() called ... ");
+
+            //Set empty text to display "No earthquakes found"
+            mEmptyStateTextView.setText(R.string.no_earthquakes);
 
             //Clear the adapter of previous earthquake data
             mAdapter.clear();

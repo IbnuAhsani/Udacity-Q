@@ -21,4 +21,6 @@
     <string name="near_the">Near the</string>
 
     <string name="no_earthquakes">No Earthquakes found.</string>
+
+    <string name="no_internet">Not connected to any Network</string>
 </resources>

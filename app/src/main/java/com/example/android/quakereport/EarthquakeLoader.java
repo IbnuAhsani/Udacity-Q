@@ -46,9 +46,9 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
             Log.i(LOG_TAG, "TEST: loadInBackground() called ... ");
 
             if(this.mUrl == null)
-            {
-                return null;
-            }
+                {
+                    return null;
+                }
 
             List<Earthquake> result = QueryUtils.fetchEarthquakeData(mUrl);
             return result;

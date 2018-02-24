@@ -196,6 +196,16 @@ public final class QueryUtils {
         {
             Log.i(LOG_TAG, "TEST: fetchEarthquakeData() called ... ");
 
+            // A simulation of a slow network with a delay time of 2 seconds
+            try
+                {
+                   Thread.sleep(2000);
+                }
+            catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+
             //Create URL object
             URL url = createURL(resultUrl);
 

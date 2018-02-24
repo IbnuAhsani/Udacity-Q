@@ -17,6 +17,7 @@ package com.example.android.quakereport;
 
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.Loader;
 import android.net.Uri;
@@ -28,6 +29,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -36,6 +38,8 @@ import java.util.List;
 public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Earthquake>> {
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
+
+    /* The USGS Api URL */
     private static final String USGS_REQUEST_URL =
             "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=5&limit=10";
 
@@ -44,6 +48,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
     /* TextView that is displayed if the list is empty */
     private TextView mEmptyStateTextView;
+
+    /* ProgressBar variable */
+    private ProgressBar progressBar;
 
     /**
      * Constant value for the earthquake Loader ID. We can chose any integer.
@@ -59,6 +66,11 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
         // Get a reference to the ListView, and attach the adapter to the listView.
         ListView listView = (ListView) findViewById(R.id.list);
+
+        // Set the progress bar to the ProgressBar View in the xml
+        // And set it into an indeterminate state
+        progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
+        progressBar.setProgress(0);
 
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
         listView.setEmptyView(mEmptyStateTextView);
@@ -207,14 +219,17 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         {
             Log.i(LOG_TAG, "TEST: onLoadFinished() called ... ");
 
-            //Set empty text to display "No earthquakes found"
+            // Once hte onLoadFinished() method is called, the loading progressbar will disappear
+            progressBar.setVisibility(View.GONE);
+
+            // Set empty text to display "No earthquakes found"
             mEmptyStateTextView.setText(R.string.no_earthquakes);
 
-            //Clear the adapter of previous earthquake data
+            // Clear the adapter of previous earthquake data
             mAdapter.clear();
 
-            //If there is a valid list of {@link Earthquake} then add them to the adapter's
-            //data set. This will trigger the ListView to update
+            // If there is a valid list of {@link Earthquake} then add them to the adapter's
+            // data set. This will trigger the ListView to update
             if(earthquakes != null && !earthquakes.isEmpty())
             {
                 mAdapter.addAll(earthquakes);
@@ -226,7 +241,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         {
             Log.i(LOG_TAG, "TEST: onLoaderReset() called ... ");
 
-            //Loader reset, so we can clear out our existing data
+            // Loader reset, so we can clear out our existing data
             mAdapter.clear();
         }
 }
